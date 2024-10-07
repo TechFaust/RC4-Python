@@ -1,5 +1,5 @@
 class Mobile:
-    def __init__(self, largeur: float, hauteur: float, position: (float, float) = (0, 0), angle:float = 0):
+    def __init__(self, largeur: float, hauteur: float, position: (float, float) = (0, 0), angle: float = 0):
         self.__width = largeur
         self.__height = hauteur
         self.__position = position
@@ -10,10 +10,6 @@ class Mobile:
         rayon = sqrt(offset[0] ** 2 + offset[1] ** 2)
         angle = atan2(offset[1], offset[0]) + self.__angle
         return self.__position[0] + cos(angle) * rayon, self.__position[1] + sin(angle) * rayon
-
-    @property
-    def centre(self) -> (float, float):
-        return self.__position
 
     @property
     def BG(self) -> (float, float):
@@ -38,3 +34,11 @@ class Mobile:
     @angle.setter
     def angle(self, angle: float):
         self.__angle = angle
+
+    @property
+    def position(self) -> (float, float):
+        return self.__position
+
+    @position.setter
+    def position(self, centre: (float, float) = (0, 0)):
+        self.__position = centre
