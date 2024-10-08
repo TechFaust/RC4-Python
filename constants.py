@@ -1,4 +1,12 @@
 # toutes les valeurs sont données en mm
+from enum import Enum
+
+class Position(Enum):
+    BG = 'BG'
+    BD = 'BD'
+    HG = 'HG'
+    HD = 'HD'
+
 
 # espace de travail
 ESPACE_TRAVAIL = (550, 650)
