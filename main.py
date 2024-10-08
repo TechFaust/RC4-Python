@@ -1,18 +1,16 @@
-import conf
+import sys
+from tkinter.constants import DISABLED
+
+from Milieu import Milieu
+from Mobile import Mobile
+from constants import Position
+
 
 def show(x1, y1, x2, y2, x3, y3, x4, y4):
     import matplotlib.pyplot as plt
 
-    # Définir les quatre points du rectangle
-    points = [(x1, y1), (x2, y2), (x3, y3), (x4, y4)]  # Exemple de points
-
-    # Séparer les points en listes de coordonnées X et Y
-    x, y = zip(*points)
-
-
-    # Ajouter le premier point à la fin pour fermer le rectangle
-    x += (x[0],)
-    y += (y[0],)
+    x = [x1, x2, x3, x4, x1]
+    y = [y1, y2, y3, y4, y1]
 
     # Tracer le rectangle
     plt.plot(x, y, marker='o')
@@ -27,19 +25,20 @@ def show(x1, y1, x2, y2, x3, y3, x4, y4):
     # Afficher le graphique
     plt.show()
 
-def translator(x_centre: float, y_centre: float, offset_x: float, offset_y: float, theta: float) -> (float, float):
-    from math import sqrt, atan2, cos, sin
-    rayon = sqrt(offset_x**2 + offset_y**2)
-    angle = atan2(offset_y, offset_x) + theta
-    return x_centre + cos(angle) * rayon, y_centre + sin(angle) * rayon
 
 def main() -> None:
-    x1, y1 = translator(100, 100, -50, -25, 0.5)
-    x2, y2 = translator(100, 100, 50, -25, 0.5)
-    x3, y3 = translator(100, 100, 50, 25, 0.5)
-    x4, y4 = translator(100, 100, -50, 25, 0.5)
+    mob = Mobile(100, 50, (100, 100), 0)
+    milieu = Milieu(mob)
 
-    show(x1, y1, x2, y2, x3, y3, x4, y4)
+    milieu.move((0, 0))
+
+    print(f"distance bas gauche = {milieu.l_cable(Position.BG)}mm")
+
+    print(f"distance bas droite = {milieu.l_cable(Position.BD)}mm")
+
+    print(f"distance haut gauche = {milieu.l_cable(Position.HG)}mm")
+
+    print(f"distance haut droite = {milieu.l_cable(Position.HD)}mm")
 
     exit(0)
 
