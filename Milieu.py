@@ -12,6 +12,7 @@ class Milieu:
     def __init__(self, mobile: Mobile = Mobile(DM[0], DM[1], (0,0), 0)):
         self.__mobile = mobile
 
+
     def move(self, position: (float, float)) -> (float, float):
         from constants import ESPACE_TRAVAIL as ET
         x = clamp(0, ET[0], position[0])
@@ -19,15 +20,16 @@ class Milieu:
         self.__mobile.position = (x, y)
         return x, y
 
+
     def turn(self, angle: float) -> float:
         from math import pi
         angle = clamp(-pi/4, pi/4, angle)
         self.__mobile.angle = angle
         return angle
 
-    def l_cable(self, position: Position) -> float:
-        from constants import POSITIONS_POULIES as PP, RAYON_POULIE as RP
-        from math import sqrt, pi, acos
+
+    def __position_to_coords(self, position: Position) -> ((float, float), (float, float)):
+        from constants import POSITIONS_POULIES as PP
         if position == Position.BG:
             xc, yc = self.__mobile.BG
             xp, yp = PP['BG']
@@ -42,6 +44,27 @@ class Milieu:
             xp, yp = PP['HD']
         else:
             raise AttributeError
+        return (xc, yc), (xp, yp)
+
+
+    def qe_cable(self, position: Position) -> float:
+        from constants import RAYON_POULIE as RP
+        from math import sqrt, pi, acos
+
+        (xc, yc), (xp, yp) = self.__position_to_coords(position)
+
+        di = sqrt((xp - xc)**2 + (yp - yc)**2)
+        alpha = acos(abs(yp - yc) / di)
+        beta = acos(RP / di)
+        qe = pi - alpha - beta
+        return qe
+
+
+    def l_cable(self, position: Position) -> float:
+        from constants import RAYON_POULIE as RP
+        from math import sqrt, pi, acos
+
+        (xc, yc), (xp, yp) = self.__position_to_coords(position)
 
         di = sqrt((xp - xc)**2 + (yp - yc)**2)
         li = sqrt(di ** 2 - RP ** 2)
@@ -51,3 +74,7 @@ class Milieu:
 
         return li + RP * qe
 
+
+    def angle_mobile(self, position: Position) -> (float, float):
+        (xc, yc), _ = self.__position_to_coords(position)
+        return xc, yc
